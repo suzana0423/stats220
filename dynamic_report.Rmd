@@ -42,9 +42,6 @@ My most frequently purchased coffee type is `r top_coffee`.
 
 
 ```{r}
-pets <- c("cat", "dog", "turtle", "rabbit")
-best_pet <- pets[1]
-
 # 1. 咖啡类型计数图（按频率排序）
 latest_data %>%
 count(coffee_type) %>%
