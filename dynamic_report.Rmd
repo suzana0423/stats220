@@ -1,0 +1,107 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+suppressPackageStartupMessages(library(tidyverse))
+
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTRwLiMWePLMqiV4WMcgRVqAU-tmE6eMrdye1PlyS5O1HUBreGv1fm7G78GIP0YFr2vNs-ev64MSL8E/pub?gid=1623781049&single=true&output=csv")
+
+latest_data <- logged_data %>%
+  rename(
+    coffee_type = `1.What type of coffee did you drink?`,
+    price = `2.How much did it cost (NZD)?`,
+    location = `3. Where did you buy it?`,
+    rating = `4.How would you rate it (1–5)?`
+  )
+
+mean_price <- mean(latest_data$price, na.rm = TRUE)
+max_price <- max(latest_data$price, na.rm = TRUE)
+
+top_coffee <- latest_data %>% count(coffee_type, sort = TRUE) %>% slice(1) %>% pull(coffee_type)
+```
+
+```{css}
+body {
+  font-family: Arial;
+}
+h2 {
+  color: #6b4f4f;
+}
+
+```
+## ☕ Coffee Drinking Insights
+This report explores my coffee drinking habits, including what types of coffee I drink, where I buy them, and how much I spend.
+
+On average, I spend `r round(mean_price, 2)` NZD on coffee.
+The most expensive coffee I bought cost `r max_price` NZD.
+My most frequently purchased coffee type is `r top_coffee`.
+
+
+
+```{r}
+pets <- c("cat", "dog", "turtle", "rabbit")
+best_pet <- pets[1]
+
+# 1. 咖啡类型计数图（按频率排序）
+latest_data %>%
+count(coffee_type) %>%
+ggplot() +
+geom_bar(aes(x = reorder(coffee_type, -n), y = n, fill = coffee_type),
+stat = "identity", show.legend = FALSE) +
+labs(
+title = "Number of Coffees by Type",
+x = "Coffee Type",
+y = "Count"
+) +
+theme_minimal() +
+theme(
+axis.text.x = element_text(angle = 45, hjust = 1),
+plot.title = element_text(hjust = 0.5, face = "bold")
+)
+
+# 2. 购买地点计数图
+latest_data %>%
+count(location) %>%
+ggplot() +
+geom_bar(aes(x = reorder(location, -n), y = n, fill = location),
+stat = "identity", show.legend = FALSE) +
+labs(
+title = "Where Coffee Was Bought",
+x = "Location",
+y = "Count"
+) +
+theme_minimal() +
+theme(
+axis.text.x = element_text(angle = 45, hjust = 1),
+plot.title = element_text(hjust = 0.5, face = "bold")
+)
+
+# 3. 评分分布图
+latest_data %>%
+count(rating) %>%
+ggplot() +
+geom_bar(aes(x = factor(rating), y = n, fill = factor(rating)),
+stat = "identity", show.legend = FALSE) +
+labs(
+title = "Coffee Ratings Distribution",
+x = "Rating (1-5)",
+y = "Count"
+) +
+theme_minimal() +
+theme(
+plot.title = element_text(hjust = 0.5, face = "bold")
+)
+
+
+```
+
+### Useful links
+[Visit GitHub](https://github.com)  
+[Learn R](https://www.r-project.org/)
+
+### Fun GIF
+![](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3Zoa2FtZW95dHU3cTMyZjF1azZ2eWx2Z3h3anc4cXFxeGxxMDBmdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qXBsRpqWGsA8/giphy.gif)
+
