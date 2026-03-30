@@ -5,7 +5,7 @@ output: html_fragment
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
-suppressPackageStartupMessages(library(tidyverse))
+library(tidyverse)
 
 logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTRwLiMWePLMqiV4WMcgRVqAU-tmE6eMrdye1PlyS5O1HUBreGv1fm7G78GIP0YFr2vNs-ev64MSL8E/pub?gid=1623781049&single=true&output=csv")
 
